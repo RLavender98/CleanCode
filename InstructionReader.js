@@ -1,16 +1,27 @@
 export class InstructionReader {
-    readOpcode = (instruction) => {
-        return instruction % 100;
+    readOpcode = (instructionCode) => {
+        return instructionCode % 100;
     }
 
-    readParameterModes = (instruction, instructionRunner) => {
+    readParameterModes = (instructionCode, instruction) => {
         const parameterModes = [];
-        let parameterInstruction = (instruction - instructionRunner.opcode) / 100;
-        for (let i = 0; i < instructionRunner.numberOfParameters; i++) {
-            let currentMode = parameterInstruction % 10;
-            parameterModes.push(currentMode);
-            parameterInstruction = (parameterInstruction - currentMode) / 10;
+        let parameterInstructionCode = this.removeOpcodeFromInstructionCode(instructionCode);
+        for (let i = 0; i < instruction.numberOfParameters; i++) {
+            parameterModes.push(this.readParameterMode(parameterInstructionCode));
+            parameterInstructionCode = this.removeFinalParameterFromParameterInstructionCode(parameterInstructionCode);
         }
         return parameterModes;
+    }
+
+    readParameterMode = (parameterInstructionCode) => {
+        return parameterInstructionCode % 10;
+    }
+
+    removeOpcodeFromInstructionCode = (instructionCode) => {
+        return (instructionCode - instructionCode % 100) / 100;
+    }
+
+    removeFinalParameterFromParameterInstructionCode = (parameterInstructionCode) => {
+        return (parameterInstructionCode - parameterInstructionCode % 10) / 10;
     }
 }

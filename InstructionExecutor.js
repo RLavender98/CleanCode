@@ -1,12 +1,12 @@
 export class InstructionExecutor {
-    constructor(instructionRunners, instructionReader) {
-        this.instructionRunners = instructionRunners;
+    constructor(instructions, instructionReader) {
+        this.instructions = instructions;
         this.instructionReader = instructionReader;
     }
 
-    executeInstruction = (input, currentPosition, operationInput) => {
-        const opcode = this.instructionReader.readOpcode(input[currentPosition]);
-        const instruction = [opcode, this.instructionReader.readParameterModes(input[currentPosition], this.instructionRunners[opcode - 1])]
-        return this.instructionRunners[instruction[0] - 1].runInstruction(input, currentPosition, instruction[1], operationInput);
+    executeInstruction = (input, runConditionalParameters) => {
+        const opcode = this.instructionReader.readOpcode(input[runConditionalParameters.currentPosition]);
+        const instructionCode = [opcode, this.instructionReader.readParameterModes(input[runConditionalParameters.currentPosition], this.instructions[opcode - 1])]
+        return this.instructions[instructionCode[0] - 1].execute(input, runConditionalParameters, instructionCode[1]);
     }
 }
