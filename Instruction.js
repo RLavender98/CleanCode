@@ -11,14 +11,14 @@ class Instruction {
         return input[position];
     }
 
-    skipToNextInstruction(runConditionalParameters) {
-        runConditionalParameters.currentPosition += this.numberOfParameters + 1;
-        return runConditionalParameters;
+    skipToNextInstruction(runParameters) {
+        runParameters.currentPosition += this.numberOfParameters + 1;
+        return runParameters;
     }
 
-    skipToPosition(runConditionalParameters, positionToSkipTo) {
-        runConditionalParameters.currentPosition = positionToSkipTo;
-        return runConditionalParameters;
+    skipToPosition(runParameters, positionToSkipTo) {
+        runParameters.currentPosition = positionToSkipTo;
+        return runParameters;
     }
 }
 
@@ -27,10 +27,10 @@ export class InstructionOne extends Instruction {
         super(1,3);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        input[input[runConditionalParameters.currentPosition + 3]] = this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0])
-            + this.getValue(input, runConditionalParameters.currentPosition + 2, parameterModes[1]) ;
-        return this.skipToNextInstruction(runConditionalParameters);
+    execute = (input, runParameters, parameterModes) => {
+        input[input[runParameters.currentPosition + 3]] = this.getValue(input, runParameters.currentPosition + 1, parameterModes[0])
+            + this.getValue(input, runParameters.currentPosition + 2, parameterModes[1]) ;
+        return this.skipToNextInstruction(runParameters);
     }
 }
 
@@ -39,10 +39,10 @@ export class InstructionTwo extends Instruction {
         super(2,3);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        input[input[runConditionalParameters.currentPosition + 3]] = this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0])
-            * this.getValue(input, runConditionalParameters.currentPosition + 2, parameterModes[1]) ;
-        return this.skipToNextInstruction(runConditionalParameters);
+    execute = (input, runParameters, parameterModes) => {
+        input[input[runParameters.currentPosition + 3]] = this.getValue(input, runParameters.currentPosition + 1, parameterModes[0])
+            * this.getValue(input, runParameters.currentPosition + 2, parameterModes[1]) ;
+        return this.skipToNextInstruction(runParameters);
     }
 }
 
@@ -51,10 +51,10 @@ export class InstructionThree extends Instruction {
         super(3,1);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        input[input[runConditionalParameters.currentPosition + 1]] = runConditionalParameters.operationInputs[0];
-        runConditionalParameters.operationInputs = runConditionalParameters.operationInputs.slice(1);
-        return this.skipToNextInstruction(runConditionalParameters);
+    execute = (input, runParameters, parameterModes) => {
+        input[input[runParameters.currentPosition + 1]] = runParameters.operationInputs[0];
+        runParameters.operationInputs = runParameters.operationInputs.slice(1);
+        return this.skipToNextInstruction(runParameters);
     }
 }
 
@@ -63,9 +63,9 @@ export class InstructionFour extends Instruction {
         super(4,1);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        runConditionalParameters.output = this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0]);
-        return this.skipToNextInstruction(runConditionalParameters);
+    execute = (input, runParameters, parameterModes) => {
+        runParameters.output = this.getValue(input, runParameters.currentPosition + 1, parameterModes[0]);
+        return this.skipToNextInstruction(runParameters);
     }
 }
 
@@ -74,11 +74,11 @@ export class InstructionFive extends Instruction {
         super(5,2);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        if(this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0]) !== 0) {
-            return this.skipToPosition(runConditionalParameters, this.getValue(input, runConditionalParameters.currentPosition + 2, parameterModes[1]));
+    execute = (input, runParameters, parameterModes) => {
+        if(this.getValue(input, runParameters.currentPosition + 1, parameterModes[0]) !== 0) {
+            return this.skipToPosition(runParameters, this.getValue(input, runParameters.currentPosition + 2, parameterModes[1]));
         } else {
-            return this.skipToNextInstruction(runConditionalParameters);
+            return this.skipToNextInstruction(runParameters);
         }
     }
 }
@@ -88,11 +88,11 @@ export class InstructionSix extends Instruction {
         super(6,2);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        if(this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0]) === 0) {
-            return this.skipToPosition(runConditionalParameters, this.getValue(input, runConditionalParameters.currentPosition + 2, parameterModes[1]));
+    execute = (input, runParameters, parameterModes) => {
+        if(this.getValue(input, runParameters.currentPosition + 1, parameterModes[0]) === 0) {
+            return this.skipToPosition(runParameters, this.getValue(input, runParameters.currentPosition + 2, parameterModes[1]));
         } else {
-            return this.skipToNextInstruction(runConditionalParameters);
+            return this.skipToNextInstruction(runParameters);
         }
     }
 }
@@ -102,13 +102,13 @@ export class InstructionSeven extends Instruction {
         super(7,3);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        if(this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0]) < this.getValue(input, runConditionalParameters.currentPosition + 2, parameterModes[1])) {
-            input[input[runConditionalParameters.currentPosition + 3]] = 1;
+    execute = (input, runParameters, parameterModes) => {
+        if(this.getValue(input, runParameters.currentPosition + 1, parameterModes[0]) < this.getValue(input, runParameters.currentPosition + 2, parameterModes[1])) {
+            input[input[runParameters.currentPosition + 3]] = 1;
         } else {
-            input[input[runConditionalParameters.currentPosition + 3]] = 0;
+            input[input[runParameters.currentPosition + 3]] = 0;
         }
-        return this.skipToNextInstruction(runConditionalParameters);
+        return this.skipToNextInstruction(runParameters);
     }
 }
 
@@ -117,12 +117,12 @@ export class InstructionEight extends Instruction {
         super(8,3);
     }
 
-    execute = (input, runConditionalParameters, parameterModes) => {
-        if(this.getValue(input, runConditionalParameters.currentPosition + 1, parameterModes[0]) === this.getValue(input, runConditionalParameters.currentPosition + 2, parameterModes[1])) {
-            input[input[runConditionalParameters.currentPosition + 3]] = 1;
+    execute = (input, runParameters, parameterModes) => {
+        if(this.getValue(input, runParameters.currentPosition + 1, parameterModes[0]) === this.getValue(input, runParameters.currentPosition + 2, parameterModes[1])) {
+            input[input[runParameters.currentPosition + 3]] = 1;
         } else {
-            input[input[runConditionalParameters.currentPosition + 3]] = 0;
+            input[input[runParameters.currentPosition + 3]] = 0;
         }
-        return this.skipToNextInstruction(runConditionalParameters);
+        return this.skipToNextInstruction(runParameters);
     }
 }
